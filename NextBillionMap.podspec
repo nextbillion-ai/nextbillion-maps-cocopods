@@ -9,7 +9,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "NextBillionMap"
-  spec.version      = "2.0.3-beta.1"
+  spec.version      = "2.0.3"
   spec.summary      = "The nextbillion.ai iOS  map cocoapods repo"
 
   spec.description  = <<-DESC
