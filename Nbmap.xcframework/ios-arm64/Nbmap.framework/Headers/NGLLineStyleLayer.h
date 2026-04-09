@@ -597,6 +597,100 @@ NGL_EXPORT
 
 @property (nonatomic, null_resettable) NSExpression *lineTranslateAnchor __attribute__((unavailable("Use lineTranslationAnchor instead.")));
 
+#if TARGET_OS_IPHONE
+/**
+ The color to use for the trimmed part of the line. If not set (alpha = 0), the
+ trimmed part will be transparent. Requires line-trim-offset.
+ 
+ The default value of this property is an expression that evaluates to
+ `UIColor.clearColor`. Set this property to `nil` to reset it to the default
+ value.
+ 
+ You can set this property to an expression containing any of the following:
+ 
+ * Constant `UIColor` values
+ * Predefined functions, including mathematical and string operators
+ * Conditional expressions
+ * Variable assignments and references to assigned variables
+ * Step functions applied to the `$zoomLevel` variable
+ 
+ This property does not support applying interpolation functions to the
+ `$zoomLevel` variable or applying interpolation or step functions to feature
+ attributes.
+ */
+@property (nonatomic, null_resettable) NSExpression *lineTrimColor;
+#else
+/**
+ The color to use for the trimmed part of the line. If not set (alpha = 0), the
+ trimmed part will be transparent. Requires line-trim-offset.
+ 
+ The default value of this property is an expression that evaluates to
+ `NSColor.clearColor`. Set this property to `nil` to reset it to the default
+ value.
+ 
+ You can set this property to an expression containing any of the following:
+ 
+ * Constant `NSColor` values
+ * Predefined functions, including mathematical and string operators
+ * Conditional expressions
+ * Variable assignments and references to assigned variables
+ * Step functions applied to the `$zoomLevel` variable
+ 
+ This property does not support applying interpolation functions to the
+ `$zoomLevel` variable or applying interpolation or step functions to feature
+ attributes.
+ */
+@property (nonatomic, null_resettable) NSExpression *lineTrimColor;
+#endif
+
+#if TARGET_OS_IPHONE
+/**
+ The line part between [trim-start, trim-end] will be invisible. The trim-start
+ and trim-end are in the range of [0, 1]. trim-end must be greater than or equal
+ to trim-start.
+ 
+ The default value of this property is an expression that evaluates to an
+ `NSValue` object containing a `CGVector` struct set to 0 rightward and 0
+ downward. Set this property to `nil` to reset it to the default value.
+ 
+ You can set this property to an expression containing any of the following:
+ 
+ * Constant `CGVector` values between 0,0 and 1,1 inclusive
+ * Predefined functions, including mathematical and string operators
+ * Conditional expressions
+ * Variable assignments and references to assigned variables
+ * Step functions applied to the `$zoomLevel` variable
+ 
+ This property does not support applying interpolation functions to the
+ `$zoomLevel` variable or applying interpolation or step functions to feature
+ attributes.
+ */
+@property (nonatomic, null_resettable) NSExpression *lineTrimOffset;
+#else
+/**
+ The line part between [trim-start, trim-end] will be invisible. The trim-start
+ and trim-end are in the range of [0, 1]. trim-end must be greater than or equal
+ to trim-start.
+ 
+ The default value of this property is an expression that evaluates to an
+ `NSValue` object containing a `CGVector` struct set to 0 rightward and 0
+ upward. Set this property to `nil` to reset it to the default value.
+ 
+ You can set this property to an expression containing any of the following:
+ 
+ * Constant `CGVector` values between 0,0 and 1,1 inclusive
+ * Predefined functions, including mathematical and string operators
+ * Conditional expressions
+ * Variable assignments and references to assigned variables
+ * Step functions applied to the `$zoomLevel` variable
+ 
+ This property does not support applying interpolation functions to the
+ `$zoomLevel` variable or applying interpolation or step functions to feature
+ attributes.
+ */
+@property (nonatomic, null_resettable) NSExpression *lineTrimOffset;
+#endif
+
 /**
  Stroke thickness.
  

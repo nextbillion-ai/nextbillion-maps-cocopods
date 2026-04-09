@@ -877,6 +877,102 @@
         XCTAssertThrowsSpecificNamed(layer.lineTranslationAnchor = functionExpression, NSException, NSInvalidArgumentException, @"NGLLineLayer should raise an exception if a camera-data expression is applied to a property that does not support key paths to feature attributes.");
     }
 
+    // line-trim-color
+    {
+        XCTAssertTrue(rawLayer->getLineTrimColor().isUndefined(),
+                      @"line-trim-color should be unset initially.");
+        NSExpression *defaultExpression = layer.lineTrimColor;
+
+        NSExpression *constantExpression = [NSExpression expressionWithFormat:@"%@", [NGLColor redColor]];
+        layer.lineTrimColor = constantExpression;
+        nbgl::style::PropertyValue<nbgl::Color> propertyValue = { { 1, 0, 0, 1 } };
+        XCTAssertEqual(rawLayer->getLineTrimColor(), propertyValue,
+                       @"Setting lineTrimColor to a constant value expression should update line-trim-color.");
+        XCTAssertEqualObjects(layer.lineTrimColor, constantExpression,
+                              @"lineTrimColor should round-trip constant value expressions.");
+
+        constantExpression = [NSExpression expressionWithFormat:@"%@", [NGLColor redColor]];
+        XCTExpectFailure(@"Awaiting unit test refactoring https://github.com/maplibre/maplibre-native/issues/421");
+        NSExpression *functionExpression = [NSExpression expressionWithFormat:@"ngl_step:from:stops:($zoomLevel, %@, %@)", constantExpression, @{@18: constantExpression}];
+        layer.lineTrimColor = functionExpression;
+
+        {
+            using namespace nbgl::style::expression::dsl;
+            propertyValue = nbgl::style::PropertyExpression<nbgl::Color>(
+                step(zoom(), literal(nbgl::Color(1, 0, 0, 1)), 18.0, literal(nbgl::Color(1, 0, 0, 1)))
+            );
+        }
+
+        XCTAssertEqual(rawLayer->getLineTrimColor(), propertyValue,
+                       @"Setting lineTrimColor to a camera expression should update line-trim-color.");
+        XCTAssertEqualObjects(layer.lineTrimColor, functionExpression,
+                              @"lineTrimColor should round-trip camera expressions.");
+
+
+        layer.lineTrimColor = nil;
+        XCTAssertTrue(rawLayer->getLineTrimColor().isUndefined(),
+                      @"Unsetting lineTrimColor should return line-trim-color to the default value.");
+        XCTAssertEqualObjects(layer.lineTrimColor, defaultExpression,
+                              @"lineTrimColor should return the default value after being unset.");
+
+        functionExpression = [NSExpression expressionForKeyPath:@"bogus"];
+        XCTAssertThrowsSpecificNamed(layer.lineTrimColor = functionExpression, NSException, NSInvalidArgumentException, @"NGLLineLayer should raise an exception if a camera-data expression is applied to a property that does not support key paths to feature attributes.");
+        functionExpression = [NSExpression expressionWithFormat:@"ngl_step:from:stops:(bogus, %@, %@)", constantExpression, @{@18: constantExpression}];
+        functionExpression = [NSExpression expressionWithFormat:@"ngl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)", @{@10: functionExpression}];
+        XCTAssertThrowsSpecificNamed(layer.lineTrimColor = functionExpression, NSException, NSInvalidArgumentException, @"NGLLineLayer should raise an exception if a camera-data expression is applied to a property that does not support key paths to feature attributes.");
+    }
+
+    // line-trim-offset
+    {
+        XCTAssertTrue(rawLayer->getLineTrimOffset().isUndefined(),
+                      @"line-trim-offset should be unset initially.");
+        NSExpression *defaultExpression = layer.lineTrimOffset;
+
+        NSExpression *constantExpression = [NSExpression expressionWithFormat:@"%@",
+#if TARGET_OS_IPHONE
+            [NSValue valueWithCGVector:CGVectorMake(1, 1)]
+#else
+            [NSValue valueWithNGLVector:CGVectorMake(1, -1)]
+#endif
+        ];
+        layer.lineTrimOffset = constantExpression;
+        nbgl::style::PropertyValue<std::array<float, 2>> propertyValue = { { 1, 1 } };
+        XCTAssertEqual(rawLayer->getLineTrimOffset(), propertyValue,
+                       @"Setting lineTrimOffset to a constant value expression should update line-trim-offset.");
+        XCTAssertEqualObjects(layer.lineTrimOffset, constantExpression,
+                              @"lineTrimOffset should round-trip constant value expressions.");
+
+        constantExpression = [NSExpression expressionWithFormat:@"{1, 1}"];
+        XCTExpectFailure(@"Awaiting unit test refactoring https://github.com/maplibre/maplibre-native/issues/421");
+        NSExpression *functionExpression = [NSExpression expressionWithFormat:@"ngl_step:from:stops:($zoomLevel, %@, %@)", constantExpression, @{@18: constantExpression}];
+        layer.lineTrimOffset = functionExpression;
+
+        {
+            using namespace nbgl::style::expression::dsl;
+            propertyValue = nbgl::style::PropertyExpression<std::array<float, 2>>(
+                step(zoom(), literal({ 1, 1 }), 18.0, literal({ 1, 1 }))
+            );
+        }
+
+        XCTAssertEqual(rawLayer->getLineTrimOffset(), propertyValue,
+                       @"Setting lineTrimOffset to a camera expression should update line-trim-offset.");
+        XCTAssertEqualObjects(layer.lineTrimOffset, functionExpression,
+                              @"lineTrimOffset should round-trip camera expressions.");
+
+
+        layer.lineTrimOffset = nil;
+        XCTAssertTrue(rawLayer->getLineTrimOffset().isUndefined(),
+                      @"Unsetting lineTrimOffset should return line-trim-offset to the default value.");
+        XCTAssertEqualObjects(layer.lineTrimOffset, defaultExpression,
+                              @"lineTrimOffset should return the default value after being unset.");
+
+        functionExpression = [NSExpression expressionForKeyPath:@"bogus"];
+        XCTAssertThrowsSpecificNamed(layer.lineTrimOffset = functionExpression, NSException, NSInvalidArgumentException, @"NGLLineLayer should raise an exception if a camera-data expression is applied to a property that does not support key paths to feature attributes.");
+        functionExpression = [NSExpression expressionWithFormat:@"ngl_step:from:stops:(bogus, %@, %@)", constantExpression, @{@18: constantExpression}];
+        functionExpression = [NSExpression expressionWithFormat:@"ngl_interpolate:withCurveType:parameters:stops:($zoomLevel, 'linear', nil, %@)", @{@10: functionExpression}];
+        XCTAssertThrowsSpecificNamed(layer.lineTrimOffset = functionExpression, NSException, NSInvalidArgumentException, @"NGLLineLayer should raise an exception if a camera-data expression is applied to a property that does not support key paths to feature attributes.");
+    }
+
     // line-width
     {
         XCTAssertTrue(rawLayer->getLineWidth().isUndefined(),
@@ -972,6 +1068,8 @@
     [self testPropertyName:@"line-pattern" isBoolean:NO];
     [self testPropertyName:@"line-translation" isBoolean:NO];
     [self testPropertyName:@"line-translation-anchor" isBoolean:NO];
+    [self testPropertyName:@"line-trim-color" isBoolean:NO];
+    [self testPropertyName:@"line-trim-offset" isBoolean:NO];
     [self testPropertyName:@"line-width" isBoolean:NO];
 }
 

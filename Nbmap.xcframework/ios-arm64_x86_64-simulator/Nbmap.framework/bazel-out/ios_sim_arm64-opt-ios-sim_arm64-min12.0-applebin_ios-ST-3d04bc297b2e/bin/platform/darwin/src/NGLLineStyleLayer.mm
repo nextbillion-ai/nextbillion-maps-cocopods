@@ -508,6 +508,42 @@ namespace nbgl {
     return self.lineTranslationAnchor;
 }
 
+- (void)setLineTrimColor:(NSExpression *)lineTrimColor {
+    NGLAssertStyleLayerIsValid();
+    NGLLogDebug(@"Setting lineTrimColor: %@", lineTrimColor);
+
+    auto nbglValue = NGLStyleValueTransformer<nbgl::Color, NGLColor *>().toPropertyValue<nbgl::style::PropertyValue<nbgl::Color>>(lineTrimColor, false);
+    self.rawLayer->setLineTrimColor(nbglValue);
+}
+
+- (NSExpression *)lineTrimColor {
+    NGLAssertStyleLayerIsValid();
+
+    auto propertyValue = self.rawLayer->getLineTrimColor();
+    if (propertyValue.isUndefined()) {
+        propertyValue = self.rawLayer->getDefaultLineTrimColor();
+    }
+    return NGLStyleValueTransformer<nbgl::Color, NGLColor *>().toExpression(propertyValue);
+}
+
+- (void)setLineTrimOffset:(NSExpression *)lineTrimOffset {
+    NGLAssertStyleLayerIsValid();
+    NGLLogDebug(@"Setting lineTrimOffset: %@", lineTrimOffset);
+
+    auto nbglValue = NGLStyleValueTransformer<std::array<float, 2>, NSValue *>().toPropertyValue<nbgl::style::PropertyValue<std::array<float, 2>>>(lineTrimOffset, false);
+    self.rawLayer->setLineTrimOffset(nbglValue);
+}
+
+- (NSExpression *)lineTrimOffset {
+    NGLAssertStyleLayerIsValid();
+
+    auto propertyValue = self.rawLayer->getLineTrimOffset();
+    if (propertyValue.isUndefined()) {
+        propertyValue = self.rawLayer->getDefaultLineTrimOffset();
+    }
+    return NGLStyleValueTransformer<std::array<float, 2>, NSValue *>().toExpression(propertyValue);
+}
+
 - (void)setLineWidth:(NSExpression *)lineWidth {
     NGLAssertStyleLayerIsValid();
     NGLLogDebug(@"Setting lineWidth: %@", lineWidth);
