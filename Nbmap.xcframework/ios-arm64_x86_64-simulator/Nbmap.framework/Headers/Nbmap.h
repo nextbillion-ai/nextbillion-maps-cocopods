@@ -74,6 +74,12 @@
 #import <Nbmap/NGLMapView+IBAdditions.h>
 #import <Nbmap/NGLMapView.h>
 #import <Nbmap/NGLMapViewDelegate.h>
+#import <Nbmap/NGLRegionalOffline.h>
+#import <Nbmap/NGLRegionalOfflineClient.h>
+#import <Nbmap/NGLRegionalOfflineConfig.h>
+#import <Nbmap/NGLRegionalOfflineLifecycle.h>
+#import <Nbmap/NGLRegionalOfflineStyleCatalog.h>
+#import <Nbmap/NGLRegionalOfflineTypes.h>
 #import <Nbmap/NGLScaleBar.h>
 #import <Nbmap/NGLUserLocation.h>
 #import <Nbmap/NGLUserLocationAnnotationView.h>

@@ -521,6 +521,14 @@ NGL_EXPORT
  */
 @property (nonatomic, assign) double tileLodZoomShift;
 
+/**
+ A Boolean value indicating whether tile loading should stay cache-only for regional offline packs.
+
+ When set to `YES`, tile requests do not follow with network fetches if a tile is not found in local
+ databases. The default value is `NO`.
+ */
+@property (nonatomic, assign) BOOL regionalOfflineTileFetchCacheOnly;
+
 // MARK: Displaying the User’s Location
 
 /**

@@ -234,6 +234,58 @@ NGL_EXPORT
 @property (nonatomic, readonly, copy) NSURL *databaseURL;
 
 /**
+ Sets read-only regional offline tile database paths.
+
+ @param paths Ordered absolute paths to regional offline SQLite databases.
+ @param completion A completion handler called on the main queue after paths are registered.
+ */
+- (void)setRegionalOfflineTileDatabasePaths:(NSArray<NSString *> *)paths
+                          completionHandler:(void (^ _Nullable)(void))completion;
+
+/**
+ Sets indexed read-only regional offline tile databases. SQLite files are opened lazily.
+
+ Each descriptor accepts path, region_id, data_source, min_zoom, max_zoom, and
+ bounds in south/west/north/east order.
+ */
+- (void)setRegionalOfflineTileDatabaseDescriptors:(NSArray<NSDictionary<NSString *, id> *> *)descriptors
+                                completionHandler:(void (^ _Nullable)(void))completion;
+
+/**
+ Sets whether regional offline preview/resource and tile pack databases are used as fallback
+ after the main ambient cache misses.
+
+ @param enabled When YES, registered regional packs are queried for offline fallback.
+ @param completion Called on the main queue after the flag is applied.
+ */
+- (void)setRegionalOfflinePackFallbackEnabled:(BOOL)enabled
+                          completionHandler:(void (^ _Nullable)(void))completion;
+
+/**
+ Re-opens the current versioned regional preview database for the current tile server.
+ */
+- (void)reloadRegionalOfflinePreviewWithCompletionHandler:(void (^ _Nullable)(void))completion;
+
+/**
+ Re-opens the current versioned regional preview database and reports whether
+ the native database actor actually opened it.
+
+ @param completion Called on the main queue. `error` is nil only when the
+ current generation is open and ready for resource lookup.
+ */
+- (void)reloadRegionalOfflinePreviewWithResultHandler:
+    (void (^ _Nullable)(NSError *_Nullable error))completion;
+
+/**
+ Re-opens Preview only if the database actor's tile-server options resolve to
+ the expected data source. This prevents a tile-server change racing a Preview
+ activation from validating the wrong database.
+ */
+- (void)reloadRegionalOfflinePreviewForDataSourceId:(NSInteger)dataSourceId
+                                      resultHandler:
+    (void (^ _Nullable)(NSError *_Nullable error))completion;
+
+/**
  Adds the offline packs located at the given file path to offline storage.
 
  The file must be a valid offline pack database bundled with the application or
@@ -305,7 +357,11 @@ NGL_EXPORT
  @param region A region to download.
  @param context Arbitrary data to store alongside the downloaded resources.
  @param completion The completion handler to call once the pack has been added.
-    This handler is executed asynchronously on the main queue.
+ This handler is executed asynchronously on the main queue.
+
+ This operation is available only when `NGLAccountManager` is configured for
+ the TomTom tile server. Otherwise, `pack` is nil and `error.code` is
+ `NGLErrorCodeOfflinePackUnsupportedTileServer`.
  */
 - (void)addPackForRegion:(id<NGLOfflineRegion>)region
              withContext:(NSData *)context
@@ -351,6 +407,10 @@ NGL_EXPORT
  @param pack The offline pack to be invalidated.
  @param completion The completion handler to call once the pack has been
  removed. This handler is executed asynchronously on the main queue.
+
+ This operation is available only when `NGLAccountManager` is configured for
+ the TomTom tile server. Otherwise, the completion handler receives
+ `NGLErrorCodeOfflinePackUnsupportedTileServer`.
  */
 
 - (void)invalidatePack:(NGLOfflinePack *)pack
