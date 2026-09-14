@@ -32,6 +32,12 @@ typedef NS_ENUM(NSUInteger, NGLWellKnownTileServer) {
   NGLTomTom
 };
 
+/// Posted after the global tile server options change.
+///
+/// Observers are always notified on the main thread. Existing SDK subsystems use
+/// this notification to invalidate state derived from the previous tile server.
+FOUNDATION_EXPORT NGL_EXPORT NSNotificationName const NGLTileServerOptionsDidChangeNotification;
+
 /**
  * The ``NGLAccountManager`` object provides a global way to set SDK properties such
  * as apiKey, backend URL, etc.
@@ -162,9 +168,10 @@ NGL_EXPORT
  * The SDK internally defaults to using `NGLTomTom`. If your API key doesn't support
  * NextBillion TomTom maps, you can use this method to switch to NextBillion MapTiler.
  * 
- * You can also use this method to switch tile servers during program execution,
- * but after calling this method, you must reinitialize any existing `NGLMapView` instances
- * for the changes to take effect.
+ * You can also use this method to switch tile servers during program execution.
+ * The Regional Offline engine observes this change and refreshes automatically.
+ * Existing maps may still require a style reset or recreation when the new
+ * server uses different style or resource URLs.
  * 
  * @param tileServer The well-known tile server to switch to
  * @see NGLWellKnownTileServer

@@ -60,6 +60,8 @@ typedef NS_ENUM(NSInteger, NGLErrorCode) {
   NGLErrorCodeSourceCannotBeRemovedFromStyle = 10,
   /** An error occurred while rendering */
   NGLErrorCodeRenderingError = 11,
+  /** Offline-pack downloads are unavailable for the active tile server. */
+  NGLErrorCodeOfflinePackUnsupportedTileServer = 12,
 };
 
 /** Options for enabling debugging features in an ``NGLMapView`` instance. */
