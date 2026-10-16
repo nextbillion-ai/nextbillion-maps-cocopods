@@ -29,7 +29,16 @@ typedef NS_ENUM(NSUInteger, NGLWellKnownTileServer) {
    * NextBillion provides mapping services powered by TomTom's infrastructure.
    * Offers global coverage with high performance and reliability.
    */
-  NGLTomTom
+  NGLTomTom,
+
+  /**
+   * NextBillion TomTom Orbis tile server
+   *
+   * Uses the NextBillion TomTom Orbis style and map resource APIs.
+   * Authentication can be supplied either as a query parameter or through
+   * the dynamic header configured by ``apiKeyHeaderName``.
+   */
+  NGLTomTomOrbis
 };
 
 /// Posted after the global tile server options change.
@@ -165,8 +174,8 @@ NGL_EXPORT
  * Switches the SDK to use a different well-known tile server
  * 
  * This method allows you to switch between different tile server configurations.
- * The SDK internally defaults to using `NGLTomTom`. If your API key doesn't support
- * NextBillion TomTom maps, you can use this method to switch to NextBillion MapTiler.
+ * The SDK internally defaults to using `NGLTomTom`. Use this method to switch
+ * to NextBillion MapTiler or TomTom Orbis when supported by your API key.
  * 
  * You can also use this method to switch tile servers during program execution.
  * The Regional Offline engine observes this change and refreshes automatically.
