@@ -34,8 +34,9 @@ NGL_EXPORT
  Configures the shared Regional Offline runtime from the active tile server.
 
  Configure `NGLAccountManager` before calling this method. Regional Offline is
- currently supported only with TomTom. Subsequent Regional Offline operations
- reuse this process-wide configuration and shared runtime.
+ currently supported only with TomTom, with offline map coverage available for
+ India, Australia, and the United States. Subsequent Regional Offline
+ operations reuse this process-wide configuration and shared runtime.
  */
 + (void)configure;
 
@@ -134,6 +135,17 @@ NGL_EXPORT
 
 /** Fetches the online Regional Offline catalog. Completion runs on main. */
 + (void)fetchRegionListWithCompletionHandler:(NGLRegionalOfflineRegionListCompletion)completion;
+
+/**
+ Queries catalog rows using the full English country name on the CDN.
+ Supported Regional Offline countries currently include India, Australia, and
+ the United States.
+ Whitespace is trimmed, case is preserved, and a blank value fetches all rows.
+ Completion runs on the main thread.
+ */
++ (void)fetchRegionListForCountry:(NSString *)country
+                completionHandler:(NGLRegionalOfflineRegionListCompletion)completion
+    NS_SWIFT_NAME(fetchRegionList(country:completionHandler:));
 
 /**
  Produces a merged snapshot of the available catalog and locally installed

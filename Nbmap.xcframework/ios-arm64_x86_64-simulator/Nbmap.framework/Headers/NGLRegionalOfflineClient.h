@@ -42,7 +42,15 @@ NGL_EXPORT
 
 /// Regional Offline catalog APIs are available only when TomTom is the active
 /// tile server. Asynchronous calls return UnsupportedTileServer otherwise.
+/// Fetches every catalog row for the active data source.
 - (void)fetchRegionListWithCompletionHandler:(NGLRegionalOfflineRegionListCompletion)completion;
+/// Queries catalog rows using the full English country name on the CDN.
+/// Supported Regional Offline countries currently include India, Australia,
+/// and the United States.
+/// Whitespace is trimmed, case is preserved, and a blank value fetches all rows.
+- (void)fetchRegionListForCountry:(NSString *)country
+                completionHandler:(NGLRegionalOfflineRegionListCompletion)completion
+    NS_SWIFT_NAME(fetchRegionList(country:completionHandler:));
 - (void)queryRegionsWithCompletionHandler:(NGLRegionalOfflineRegionSnapshotCompletion)completion;
 - (NSArray<NGLRegionalOfflineInstalledRegion *> *)listInstalledRegions;
 /// Returns coverage rectangles for all installed regions whose tile databases
