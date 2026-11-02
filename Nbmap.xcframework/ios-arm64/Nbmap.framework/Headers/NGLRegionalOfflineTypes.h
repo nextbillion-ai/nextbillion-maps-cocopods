@@ -96,6 +96,7 @@ NGL_EXPORT
 @property (nonatomic, readonly, copy) NSString *adminL1;
 @property (nonatomic, readonly, copy) NSString *adminL3;
 @property (nonatomic, readonly, copy, nullable) NSString *version;
+/// Aggregate byte estimate; zero when the server omits it or returns null.
 @property (nonatomic, readonly) int64_t totalSize;
 @property (nonatomic, readonly) NSInteger tileCount;
 @property (nonatomic, readonly, nullable) NSNumber *timestamp;
@@ -142,6 +143,7 @@ NGL_EXPORT
 @property (nonatomic, readonly, copy, nullable) NSString *adminL2;
 @property (nonatomic, readonly, copy, nullable) NSString *adminL3;
 @property (nonatomic, readonly, nullable) NSNumber *timestamp;
+/// Aggregate byte estimate; zero when the server omits it or returns null.
 @property (nonatomic, readonly) int64_t totalSize;
 @property (nonatomic, readonly, copy) NSArray<NGLRegionalOfflineTarInfo *> *tarList;
 - (instancetype)initWithRegionId:(NSInteger)regionId
